@@ -1,3 +1,5 @@
+use std::fmt::Write;
+
 use crate::enums::WriteFileMode;
 use crate::interpret;
 use crate::parse;
@@ -32,12 +34,20 @@ pub fn do_history(args: &[&str], history: &mut Vec<String>) {
                     history.push(line);
                 }
             }
-            "-w" => {
+            "-w" | "-a" => {
                 let maybe_path = args.get(1).unwrap();
                 let mut joined = history.join("\n");
                 joined.push('\n');
                 let bytes: &[u8] = joined.as_bytes();
-                utils::write_to_file(bytes, maybe_path, WriteFileMode::OverWrite);
+                utils::write_to_file(
+                    bytes,
+                    maybe_path,
+                    if *arg == "-w" {
+                        WriteFileMode::OverWrite
+                    } else {
+                        WriteFileMode::Append
+                    },
+                );
             }
             _ => {
                 eprintln!(
