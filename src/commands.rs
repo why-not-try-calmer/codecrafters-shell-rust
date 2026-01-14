@@ -34,7 +34,8 @@ pub fn do_history(args: &[&str], history: &mut Vec<String>) {
             }
             "-w" => {
                 let maybe_path = args.get(1).unwrap();
-                let joined = history.join(" ");
+                let mut joined = history.join("\n");
+                joined.push('\n');
                 let bytes: &[u8] = joined.as_bytes();
                 utils::write_to_file(bytes, maybe_path, WriteFileMode::OverWrite);
             }
