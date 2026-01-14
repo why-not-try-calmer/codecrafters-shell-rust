@@ -157,7 +157,7 @@ fn execute_pipeline(programs: Vec<Box<Command>>) -> Option<Output> {
 
         for line in reader.lines() {
             if let Ok(line) = line {
-                eprintln!("{}", line);
+                // eprintln!("{}", line);
                 stderr_data.extend_from_slice(line.as_bytes());
                 stderr_data.push(b'\n');
             }
