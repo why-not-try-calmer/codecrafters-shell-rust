@@ -35,6 +35,21 @@ pub fn fill_history<P: AsRef<Path>>(pathref: P, history: &mut Vec<String>) {
     }
 }
 
+pub fn dump_history<P: AsRef<Path>>(pathref: P, history: &mut Vec<String>, mode: WriteFileMode) {
+    let mut joined = history.join("\n");
+    joined.push('\n');
+    let contents: &[u8] = joined.as_bytes();
+    match mode {
+        WriteFileMode::Append => {
+            write_to_file(contents, pathref, WriteFileMode::Append);
+            history.clear();
+        }
+        WriteFileMode::OverWrite => {
+            write_to_file(contents, pathref, WriteFileMode::OverWrite);
+        }
+    }
+}
+
 pub fn write_to_file<P: AsRef<Path>>(contents: &[u8], path: P, mode: WriteFileMode) {
     let mut options = OpenOptions::new();
     options.create(true);

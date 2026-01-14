@@ -3,20 +3,21 @@ use std::{
     io::{self},
 };
 
-use codecrafters_shell::{commands::handle_command, utils};
+use codecrafters_shell::{commands::handle_command, enums::WriteFileMode, utils};
 
-fn init() -> Vec<String> {
-    let key = "HISTFILE";
-    let mut history: Vec<String> = vec![];
-    match env::var(key) {
-        Ok(pathref) => utils::fill_history(pathref, &mut history),
-        Err(_) => {}
-    }
-    history
+fn init() -> (Vec<String>, Option<String>) {
+    let history_path = env::var("HISTFILE").ok();
+    let mut history = Vec::new();
+
+    history_path
+        .as_ref()
+        .map(|path| utils::fill_history(path, &mut history));
+
+    (history, history_path)
 }
 
 fn main() {
-    let mut history: Vec<String> = init();
+    let (mut history, maybe_path) = init();
 
     loop {
         eprint!("$ ");
@@ -31,6 +32,8 @@ fn main() {
                 let cmd_args: Vec<&str> = input_str.split_whitespace().collect();
                 let (cmd, args) = cmd_args.split_first().unwrap();
                 if cmd.eq_ignore_ascii_case("exit") {
+                    let pathref = maybe_path.unwrap();
+                    utils::dump_history(pathref, &mut history, WriteFileMode::OverWrite);
                     break;
                 }
                 handle_command(cmd, args, &input_str, &mut history);

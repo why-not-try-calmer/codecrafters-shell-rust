@@ -21,22 +21,18 @@ pub fn do_type(args: &[&str]) {
 
 pub fn do_history(args: &[&str], history: &mut Vec<String>) {
     if let Some(arg) = args.get(0) {
+        let pathref = args.get(1).unwrap();
         match *arg {
             "-r" => {
-                let maybe_path = args.get(1).unwrap();
-                utils::fill_history(maybe_path, history);
+                utils::fill_history(pathref, history);
             }
             "-w" | "-a" => {
-                let mut joined = history.join("\n");
-                joined.push('\n');
-                let contents: &[u8] = joined.as_bytes();
-                let maybe_path = args.get(1).unwrap();
-                if *arg == "-a" {
-                    utils::write_to_file(contents, maybe_path, WriteFileMode::Append);
-                    history.clear();
+                let mode = if *arg == "-a" {
+                    WriteFileMode::Append
                 } else {
-                    utils::write_to_file(contents, maybe_path, WriteFileMode::OverWrite);
-                }
+                    WriteFileMode::Append
+                };
+                utils::dump_history(pathref, history, mode);
             }
             _ => {
                 eprintln!(
