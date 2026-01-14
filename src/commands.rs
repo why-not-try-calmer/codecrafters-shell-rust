@@ -1,3 +1,4 @@
+use crate::enums::WriteFileMode;
 use crate::interpret;
 use crate::parse;
 use crate::utils;
@@ -20,20 +21,31 @@ pub fn do_type(args: &[&str]) {
 
 pub fn do_history(args: &[&str], history: &mut Vec<String>) {
     if let Some(arg) = args.get(0) {
-        if *arg != "-r" {
-            eprintln!(
-                "history supports only the `-r` argument, but you passed '{}' in",
-                arg
-            );
-            return;
-        }
-        let maybe_path = args.get(1).unwrap();
-        let lines: Vec<String> = utils::read_from_file(maybe_path)
-            .lines()
-            .map(|x| x.to_string())
-            .collect();
-        for line in lines {
-            history.push(line);
+        match *arg {
+            "-r" => {
+                let maybe_path = args.get(1).unwrap();
+                let lines: Vec<String> = utils::read_from_file(maybe_path)
+                    .lines()
+                    .map(|x| x.to_string())
+                    .collect();
+                for line in lines {
+                    history.push(line);
+                }
+            }
+            "-w" => {
+                let maybe_path = args.get(1).unwrap();
+                let joined = history.join(" ");
+                let bytes: &[u8] = joined.as_bytes();
+                utils::write_to_file(bytes, maybe_path, WriteFileMode::OverWrite);
+            }
+            _ => {
+                eprintln!(
+                    "history supports only the `-r` argument, but you passed '{}' in",
+                    arg
+                );
+
+                return;
+            }
         }
     } else {
         for (idx, line) in history.iter().enumerate() {
