@@ -1,0 +1,3 @@
+123
+ls: invalid option -- 'z'
+Try 'ls --help' for more information.
