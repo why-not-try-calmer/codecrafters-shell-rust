@@ -31,8 +31,7 @@ pub fn interpret_command(commands: Vec<Command>) {
     /*
     if let Some(output) = last_output {
         write_output(&output.stdout);
-    }
-    */
+    }*/
 }
 
 fn execute_program(cmd: &str, args: Vec<String>) -> Option<Output> {
