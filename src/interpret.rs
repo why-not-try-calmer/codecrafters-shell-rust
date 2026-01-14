@@ -15,7 +15,7 @@ pub fn interpret_command(commands: Vec<Command>) {
                 last_output = execute_program(&cmd, args);
             }
             Command::Pipe { programs } => {
-                last_output = execute_pipeline(programs);
+                execute_pipeline(programs);
             }
             Command::RedirectTo {
                 path,
@@ -28,10 +28,9 @@ pub fn interpret_command(commands: Vec<Command>) {
             }
         }
     }
-    /*
     if let Some(output) = last_output {
         write_output(&output.stdout);
-    }*/
+    }
 }
 
 fn execute_program(cmd: &str, args: Vec<String>) -> Option<Output> {
