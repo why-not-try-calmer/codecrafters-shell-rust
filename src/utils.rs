@@ -1,6 +1,6 @@
 use std::env;
 use std::fs::OpenOptions;
-use std::io::Write;
+use std::io::{Read, Write};
 use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Output};
@@ -15,6 +15,14 @@ pub fn strip_bytes(mut bytes: Vec<u8>) -> Vec<u8> {
         }
     }
     bytes
+}
+
+pub fn read_from_file<P: AsRef<Path>>(maybe_path: P) -> String {
+    let mut buffer = String::new();
+    let mut options = OpenOptions::new();
+    let mut file = options.read(true).open(maybe_path).unwrap();
+    file.read_to_string(&mut buffer).unwrap();
+    buffer
 }
 
 pub fn write_to_file<P: AsRef<Path>>(contents: &[u8], path: P, mode: WriteFileMode) {
