@@ -32,7 +32,6 @@ pub fn do_history(args: &[&str], history: &mut Vec<String>) {
             .lines()
             .map(|x| x.to_string())
             .collect();
-        history.clear();
         for line in lines {
             history.push(line);
         }
