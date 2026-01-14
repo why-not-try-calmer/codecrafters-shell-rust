@@ -1,9 +1,21 @@
-use std::io::{self};
+use std::{
+    env,
+    io::{self},
+};
 
-use codecrafters_shell::commands::handle_command;
+use codecrafters_shell::{commands::handle_command, utils};
+
+fn init() -> Vec<String> {
+    let key = "HISTFILE";
+    let mut history: Vec<String> = vec![];
+    let val = env::var(key).unwrap();
+    utils::fill_history(val, &mut history);
+    history
+}
 
 fn main() {
-    let mut history: Vec<String> = vec![];
+    let mut history: Vec<String> = init();
+
     loop {
         eprint!("$ ");
         let mut input_str = String::new();

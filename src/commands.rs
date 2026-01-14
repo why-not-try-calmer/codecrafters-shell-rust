@@ -24,13 +24,7 @@ pub fn do_history(args: &[&str], history: &mut Vec<String>) {
         match *arg {
             "-r" => {
                 let maybe_path = args.get(1).unwrap();
-                let lines: Vec<String> = utils::read_from_file(maybe_path)
-                    .lines()
-                    .map(|x| x.to_string())
-                    .collect();
-                for line in lines {
-                    history.push(line);
-                }
+                utils::fill_history(maybe_path, history);
             }
             "-w" | "-a" => {
                 let mut joined = history.join("\n");

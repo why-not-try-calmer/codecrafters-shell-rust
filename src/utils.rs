@@ -25,6 +25,16 @@ pub fn read_from_file<P: AsRef<Path>>(maybe_path: P) -> String {
     buffer
 }
 
+pub fn fill_history<P: AsRef<Path>>(pathref: P, history: &mut Vec<String>) {
+    let lines: Vec<String> = read_from_file(pathref)
+        .lines()
+        .map(|x| x.to_string())
+        .collect();
+    for line in lines {
+        history.push(line);
+    }
+}
+
 pub fn write_to_file<P: AsRef<Path>>(contents: &[u8], path: P, mode: WriteFileMode) {
     let mut options = OpenOptions::new();
     options.create(true);
