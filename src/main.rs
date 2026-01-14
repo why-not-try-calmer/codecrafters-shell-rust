@@ -8,8 +8,10 @@ use codecrafters_shell::{commands::handle_command, utils};
 fn init() -> Vec<String> {
     let key = "HISTFILE";
     let mut history: Vec<String> = vec![];
-    let val = env::var(key).unwrap();
-    utils::fill_history(val, &mut history);
+    match env::var(key) {
+        Ok(pathref) => utils::fill_history(pathref, &mut history),
+        Err(_) => {}
+    }
     history
 }
 
