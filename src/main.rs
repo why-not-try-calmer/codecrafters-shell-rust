@@ -34,7 +34,7 @@ fn main() {
                 if cmd.eq_ignore_ascii_case("exit") {
                     match maybe_path {
                         Some(pathref) => {
-                            utils::dump_history(pathref, &mut history, WriteFileMode::Append)
+                            utils::dump_history(pathref, &mut history, WriteFileMode::OverWrite)
                         }
                         None => {}
                     }
