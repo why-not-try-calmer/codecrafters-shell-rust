@@ -32,8 +32,12 @@ fn main() {
                 let cmd_args: Vec<&str> = input_str.split_whitespace().collect();
                 let (cmd, args) = cmd_args.split_first().unwrap();
                 if cmd.eq_ignore_ascii_case("exit") {
-                    let pathref = maybe_path.unwrap();
-                    utils::dump_history(pathref, &mut history, WriteFileMode::OverWrite);
+                    match maybe_path {
+                        Some(pathref) => {
+                            utils::dump_history(pathref, &mut history, WriteFileMode::OverWrite)
+                        }
+                        None => {}
+                    }
                     break;
                 }
                 handle_command(cmd, args, &input_str, &mut history);
