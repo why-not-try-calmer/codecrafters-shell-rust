@@ -15,7 +15,7 @@ pub fn interpret_command(commands: Vec<Command>) {
                 last_output = execute_program(&cmd, args);
             }
             Command::Pipe { programs } => {
-                execute_pipeline(programs);
+                let _ = execute_pipeline(programs);
             }
             Command::RedirectTo {
                 path,
@@ -122,7 +122,7 @@ fn execute_pipeline(programs: Vec<Box<Command>>) -> Option<Output> {
         children.push(child);
     }
 
-    // NOW all processes are spawned and connected via pipes
+    // Now all processes are spawned and connected via pipes
     // Get the last process and start reading its output
     let mut last_child = children.pop().unwrap();
 
